@@ -1,14 +1,12 @@
 package constants;
 
 public enum ForwardConst {
-  //action
     ACT("action"),
     ACT_TOP("Top"),
     ACT_EMP("Employee"),
     ACT_REP("Report"),
     ACT_AUTH("Auth"),
 
-    //command
     CMD("command"),
     CMD_NONE(""),
     CMD_INDEX("index"),
@@ -22,7 +20,6 @@ public enum ForwardConst {
     CMD_UPDATE("update"),
     CMD_DESTROY("destroy"),
 
-    //jsp
     FW_ERR_UNKNOWN("error/unknown"),
     FW_TOP_INDEX("topPage/index"),
     FW_LOGIN("login/login"),
@@ -35,21 +32,12 @@ public enum ForwardConst {
     FW_REP_NEW("reports/new"),
     FW_REP_EDIT("reports/edit");
 
-    /**
-     * 文字列
-     */
     private final String text;
 
-    /**
-     * コンストラクタ
-     */
     private ForwardConst(final String text) {
         this.text = text;
     }
 
-    /**
-     * 値(文字列)取得
-     */
     public String getValue() {
         return this.text;
     }

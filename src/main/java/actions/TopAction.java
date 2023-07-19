@@ -1,26 +1,29 @@
 package actions;
 
 import java.io.IOException;
+import java.util.List; //追記
 
 import javax.servlet.ServletException;
 
+import actions.views.EmployeeView; //追記
+import actions.views.ReportView; //追記
 import constants.AttributeConst;
 import constants.ForwardConst;
+import constants.JpaConst;  //追記
+import services.ReportService;  //追記
 
-/**
- * トップページに関する処理を行うActionクラス
- *
- */
 public class TopAction extends ActionBase {
 
-    /**
-     * indexメソッドを実行する
-     */
+    private ReportService service;
+
     @Override
     public void process() throws ServletException, IOException {
 
-        //メソッドを実行
+        service = new ReportService();
+
         invoke();
+
+        service.close();
 
     }
 
@@ -29,14 +32,26 @@ public class TopAction extends ActionBase {
      */
     public void index() throws ServletException, IOException {
 
-        //セッションにフラッシュメッセージが設定されている場合はリクエストスコープに移し替え、セッションからは削除する
+
+        EmployeeView loginEmployee = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
+
+        int page = getPage();
+        List<ReportView> reports = service.getMinePerPage(loginEmployee, page);
+
+        long myReportsCount = service.countAllMine(loginEmployee);
+
+        putRequestScope(AttributeConst.REPORTS, reports);
+        putRequestScope(AttributeConst.REP_COUNT, myReportsCount);
+        putRequestScope(AttributeConst.PAGE, page);
+        putRequestScope(AttributeConst.MAX_ROW, JpaConst.ROW_PER_PAGE);
+
+
         String flush = getSessionScope(AttributeConst.FLUSH);
         if (flush != null) {
             putRequestScope(AttributeConst.FLUSH, flush);
             removeSessionScope(AttributeConst.FLUSH);
         }
 
-        //一覧画面を表示
         forward(ForwardConst.FW_TOP_INDEX);
     }
 
